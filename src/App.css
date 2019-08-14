@@ -1,0 +1,36 @@
+body p {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 90%;
+  margin: auto;
+  font-size: 14px;
+}
+
+.book-list {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: center;
+  margin: 5%;
+}
+
+.book-item {
+  width: 31%;
+  padding: 10px;
+}
+
+.book-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 5px 0px;
+}
+
+.book-author {
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 5px 0px;
+}
