@@ -15,20 +15,32 @@ class Landing extends Component {
     books: []
   };
 
-  componentDidMount() {
+  handleSearch = e => {
+    const searchParam = e.target.value;
+    this.setState(() => ({ searchParam }));
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
     this.getBooks();
-  }
+  };
 
   getBooks = () => {
+    this.setState({ loading: true });
     const apiKey = "Yp44Rw2ZdofVJsshzCcpCQ";
     const secret = "T0MvsQs7sICQPThVBPHiOH7niAWixr7ujpd1ZoZEQ";
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = `https://www.goodreads.com/search/index.xml?key=${apiKey}&format=json&q='red'`;
+    const url = `https://www.goodreads.com/search/index.xml?key=${apiKey}&format=json&q='${
+      this.state.searchParam
+    }'`;
 
     axios
       .get(proxyurl + url)
       .then(res => {
         this.parseXMLResponse(res.data);
+      })
+      .then(() => {
+        this.setState({ loading: false });
       })
       .catch(error => {
         console.log(error.message);
@@ -68,21 +80,26 @@ class Landing extends Component {
 
   render() {
     const { books } = this.state;
-    if (books.length === 0) {
-      return <h1>Loading...</h1>;
-    } else {
-      return (
-        <div>
-          <SearchBar searchParam={this.state.searchParam} />
+    return (
+      <div>
+        <SearchBar
+          handleSearch={this.handleSearch}
+          handleSubmit={this.handleSubmit}
+          searchParam={this.state.searchParam}
+        />
+        {this.state.loading ? (
+          <p className="loading">Loading...</p>
+        ) : (
           <div className="book-list">
             {books.map(book => (
               <BookItem book={book} />
             ))}
           </div>
-        </div>
-      );
-    }
+        )}
+      </div>
+    );
   }
+  // }
 }
 
 export default Landing;
