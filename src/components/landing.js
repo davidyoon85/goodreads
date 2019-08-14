@@ -4,6 +4,8 @@ import axios from "axios";
 import BookItem from "./BookItem";
 import SearchBar from "./SearchBar";
 
+import spinner from "./spinner.gif";
+
 class Landing extends Component {
   state = {
     searchParam: "",
@@ -28,7 +30,7 @@ class Landing extends Component {
   getBooks = () => {
     this.setState({ loading: true });
     const apiKey = "Yp44Rw2ZdofVJsshzCcpCQ";
-    const secret = "T0MvsQs7sICQPThVBPHiOH7niAWixr7ujpd1ZoZEQ";
+    // const secret = "T0MvsQs7sICQPThVBPHiOH7niAWixr7ujpd1ZoZEQ";
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
     const url = `https://www.goodreads.com/search/index.xml?key=${apiKey}&format=json&q='${
       this.state.searchParam
@@ -88,11 +90,13 @@ class Landing extends Component {
           searchParam={this.state.searchParam}
         />
         {this.state.loading ? (
-          <p className="loading">Loading...</p>
+          <p className="loading">
+            <img className="spinner" src={spinner} alt="spinner" />
+          </p>
         ) : (
           <div className="book-list">
             {books.map(book => (
-              <BookItem book={book} />
+              <BookItem key={book.id} book={book} />
             ))}
           </div>
         )}

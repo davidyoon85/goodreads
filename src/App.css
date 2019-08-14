@@ -64,3 +64,7 @@ body {
   width: 100px;
   font-size: 1rem;
 }
+
+.spinner {
+  height: 200px;
+}
