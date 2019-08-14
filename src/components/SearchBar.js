@@ -7,7 +7,7 @@ const SearchBar = props => {
       <input
         className="search-bar-input"
         type="text"
-        placeholder="Search by title..."
+        placeholder="Search by title or author..."
         value={searchParam}
         onChange={handleSearch}
       />

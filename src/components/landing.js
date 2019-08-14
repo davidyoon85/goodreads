@@ -3,13 +3,17 @@ import axios from "axios";
 
 import BookItem from "./BookItem";
 import SearchBar from "./SearchBar";
+import Pagination from "./Pagination";
 
 import spinner from "./spinner.gif";
+
+const goodReadsAPI = axios.create({
+  baseURL: "https://osprey-assignment-1--ospreyuw.repl.co"
+});
 
 class Landing extends Component {
   state = {
     searchParam: "",
-    searchRes: null,
     total: 1,
     currentPage: 1,
     errorMsg: "",
@@ -29,55 +33,41 @@ class Landing extends Component {
 
   getBooks = () => {
     this.setState({ loading: true });
-    const apiKey = "Yp44Rw2ZdofVJsshzCcpCQ";
-    // const secret = "T0MvsQs7sICQPThVBPHiOH7niAWixr7ujpd1ZoZEQ";
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = `https://www.goodreads.com/search/index.xml?key=${apiKey}&format=json&q='${
-      this.state.searchParam
-    }'`;
 
-    axios
-      .get(proxyurl + url)
-      .then(res => {
-        this.parseXMLResponse(res.data);
+    const { searchParam, currentPage } = this.state;
+    const url = `/search/${searchParam}/${currentPage}`;
+
+    goodReadsAPI
+      .get(url)
+      .then(({ data: { data: books, total } }) => {
+        if (books) {
+          this.setState(() => ({ books, total, loading: false }));
+        } else {
+          this.setState(() => ({ errorMsg: "None Found", loading: false }));
+        }
       })
-      .then(() => {
-        this.setState({ loading: false });
-      })
-      .catch(error => {
-        console.log(error.message);
+      .catch(err => {
+        this.setState(() => ({ errorMsg: "Refresh", loading: false }));
       });
   };
 
-  parseXMLResponse = response => {
-    const parser = new DOMParser();
-    const XMLResponse = parser.parseFromString(response, "application/xml");
-    const parseError = XMLResponse.getElementsByTagName("parsererror");
-
-    if (parseError.length) {
-      this.setState({
-        error: "There was an error fetching results.",
-        fetchingData: false
-      });
-    } else {
-      const XMLresults = new Array(...XMLResponse.getElementsByTagName("work"));
-      const searchResults = XMLresults.map(result => this.XMLToJson(result));
-      this.setState({ books: searchResults });
+  prevPage = () => {
+    if (this.state.currentPage > 1) {
+      this.setState(
+        prevState => ({ currentPage: prevState.currentPage - 1 }),
+        () => this.getBooks()
+      );
     }
   };
 
-  XMLToJson = XML => {
-    const allNodes = new Array(...XML.children);
-    const jsonResult = {};
-    allNodes.forEach(node => {
-      if (node.children.length) {
-        jsonResult[node.nodeName] = this.XMLToJson(node);
-      } else {
-        jsonResult[node.nodeName] = node.innerHTML;
-      }
-    });
-    console.log(jsonResult);
-    return jsonResult;
+  nextPage = () => {
+    const displayPages = Math.floor(this.state.total / 20);
+    if (this.state.currentPage < displayPages) {
+      this.setState(
+        prevState => ({ currentPage: prevState.currentPage + 1 }),
+        () => this.getBooks()
+      );
+    }
   };
 
   render() {
@@ -94,23 +84,36 @@ class Landing extends Component {
             <img className="spinner" src={spinner} alt="spinner" />
           </p>
         ) : (
-          <div className="book-list">
-            {books.map(book => (
-              <BookItem key={book.id} book={book} />
-            ))}
+          <div>
+            <div className="book-list">
+              {books.map(book => {
+                const id = book["id"][0]["_"];
+                const title = book["best_book"][0]["title"][0];
+                const author = book["best_book"][0]["author"][0]["name"][0];
+                const imgUrl = book["best_book"][0]["image_url"][0];
+                return (
+                  <BookItem
+                    key={id}
+                    title={title}
+                    author={author}
+                    imgUrl={imgUrl}
+                  />
+                );
+              })}
+            </div>
+            <div>
+              <Pagination
+                total={this.state.total}
+                currentPage={this.state.currentPage}
+                nextPage={this.nextPage}
+                prevPage={this.prevPage}
+              />
+            </div>
           </div>
         )}
       </div>
     );
   }
-  // }
 }
 
 export default Landing;
-
-// best_book:
-// author: {id: "7074943", name: "Victoria Aveyard"}
-// id: "22328546"
-// image_url: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449778912l/22328546._SX98_.jpg"
-// small_image_url: "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449778912l/22328546._SY75_.jpg"
-// title: "Red Queen (Red Queen, #1)"
