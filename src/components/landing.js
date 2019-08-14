@@ -2,15 +2,11 @@ import React, { Component } from "react";
 import axios from "axios";
 
 import BookItem from "./BookItem";
-
-const apiKey = "Yp44Rw2ZdofVJsshzCcpCQ";
-const secret = "T0MvsQs7sICQPThVBPHiOH7niAWixr7ujpd1ZoZEQ";
-const proxyurl = "https://cors-anywhere.herokuapp.com/";
-const url = `https://www.goodreads.com/search/index.xml?key=${apiKey}&format=json&q='red'`;
+import SearchBar from "./SearchBar";
 
 class Landing extends Component {
   state = {
-    searchTerm: "",
+    searchParam: "",
     searchRes: null,
     total: 1,
     currentPage: 1,
@@ -24,6 +20,11 @@ class Landing extends Component {
   }
 
   getBooks = () => {
+    const apiKey = "Yp44Rw2ZdofVJsshzCcpCQ";
+    const secret = "T0MvsQs7sICQPThVBPHiOH7niAWixr7ujpd1ZoZEQ";
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = `https://www.goodreads.com/search/index.xml?key=${apiKey}&format=json&q='red'`;
+
     axios
       .get(proxyurl + url)
       .then(res => {
@@ -71,10 +72,13 @@ class Landing extends Component {
       return <h1>Loading...</h1>;
     } else {
       return (
-        <div className="book-list">
-          {books.map(book => (
-            <BookItem book={book} />
-          ))}
+        <div>
+          <SearchBar searchParam={this.state.searchParam} />
+          <div className="book-list">
+            {books.map(book => (
+              <BookItem book={book} />
+            ))}
+          </div>
         </div>
       );
     }
