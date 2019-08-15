@@ -5,10 +5,8 @@ import BookItem from "./BookItem";
 import SearchBar from "./SearchBar";
 import Pagination from "./Pagination";
 
-import spinner from "./spinner.gif";
-
 const goodReadsAPI = axios.create({
-  baseURL: "https://osprey-assignment-1--ospreyuw.repl.co"
+  baseURL: "https://good-reads--85davidyoon.repl.co"
 });
 
 class Landing extends Component {
@@ -54,13 +52,25 @@ class Landing extends Component {
         .get(url)
         .then(({ data: { data: books, total } }) => {
           if (books) {
-            this.setState(() => ({ books, total, loading: false }));
+            this.setState(() => ({
+              books,
+              total,
+              errorMsg: "",
+              loading: false
+            }));
           } else {
-            this.setState(() => ({ errorMsg: "None Found", loading: false }));
+            this.setState(() => ({
+              errorMsg: "No books match your search.",
+              books: [],
+              loading: false
+            }));
           }
         })
         .catch(err => {
-          this.setState(() => ({ errorMsg: "Refresh", loading: false }));
+          this.setState(() => ({
+            errorMsg: "No books match your search.",
+            loading: false
+          }));
         });
     }
   };
@@ -96,10 +106,17 @@ class Landing extends Component {
         />
         {this.state.loading ? (
           <p className="loading">
-            <img className="spinner" src={spinner} alt="spinner" />
+            <img
+              className="spinner"
+              src="http://freepreloaders.com/wp-content/uploads/2019/05/5-1.svg"
+              alt="spinner"
+            />
           </p>
         ) : (
           <div>
+            {this.state.errorMsg ? (
+              <p className="search-error">{this.state.errorMsg}</p>
+            ) : null}
             <div className="book-list">
               {books.map(book => {
                 const id = book["id"][0]["_"];
