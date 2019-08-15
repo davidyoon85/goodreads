@@ -1,7 +1,7 @@
 import React from "react";
 
 const SearchBar = props => {
-  const { handleSearch, handleSubmit, searchParam } = props;
+  const { handleSearch, handleSubmit, searchParam, handleClick } = props;
   return (
     <form className="search-bar" onSubmit={handleSubmit}>
       <input
@@ -11,9 +11,18 @@ const SearchBar = props => {
         value={searchParam}
         onChange={handleSearch}
       />
-      <button className="search-bar-button" type="submit">
-        Search
-      </button>
+      <div className="search-buttons">
+        <button className="search-bar-button" type="submit">
+          Search
+        </button>
+        <button
+          className="search-bar-button"
+          type="button"
+          onClick={handleClick}
+        >
+          Reset
+        </button>
+      </div>
     </form>
   );
 };

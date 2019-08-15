@@ -26,29 +26,43 @@ class Landing extends Component {
     this.setState(() => ({ searchParam }));
   };
 
+  handleClick = e => {
+    e.preventDefault();
+    this.setState({
+      searchParam: "",
+      total: 1,
+      currentPage: 1,
+      errorMsg: "",
+      loading: false,
+      books: []
+    });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.getBooks();
   };
 
   getBooks = () => {
-    this.setState({ loading: true });
+    if (this.state.searchParam) {
+      this.setState({ loading: true });
 
-    const { searchParam, currentPage } = this.state;
-    const url = `/search/${searchParam}/${currentPage}`;
+      const { searchParam, currentPage } = this.state;
+      const url = `/search/${searchParam}/${currentPage}`;
 
-    goodReadsAPI
-      .get(url)
-      .then(({ data: { data: books, total } }) => {
-        if (books) {
-          this.setState(() => ({ books, total, loading: false }));
-        } else {
-          this.setState(() => ({ errorMsg: "None Found", loading: false }));
-        }
-      })
-      .catch(err => {
-        this.setState(() => ({ errorMsg: "Refresh", loading: false }));
-      });
+      goodReadsAPI
+        .get(url)
+        .then(({ data: { data: books, total } }) => {
+          if (books) {
+            this.setState(() => ({ books, total, loading: false }));
+          } else {
+            this.setState(() => ({ errorMsg: "None Found", loading: false }));
+          }
+        })
+        .catch(err => {
+          this.setState(() => ({ errorMsg: "Refresh", loading: false }));
+        });
+    }
   };
 
   prevPage = () => {
@@ -73,9 +87,10 @@ class Landing extends Component {
   render() {
     const { books } = this.state;
     return (
-      <div>
+      <main className="main">
         <SearchBar
           handleSearch={this.handleSearch}
+          handleClick={this.handleClick}
           handleSubmit={this.handleSubmit}
           searchParam={this.state.searchParam}
         />
@@ -101,17 +116,19 @@ class Landing extends Component {
                 );
               })}
             </div>
-            <div>
-              <Pagination
-                total={this.state.total}
-                currentPage={this.state.currentPage}
-                nextPage={this.nextPage}
-                prevPage={this.prevPage}
-              />
-            </div>
+            {this.state.total > 1 && !this.state.errorMsg.length && (
+              <div>
+                <Pagination
+                  total={this.state.total}
+                  currentPage={this.state.currentPage}
+                  nextPage={this.nextPage}
+                  prevPage={this.prevPage}
+                />
+              </div>
+            )}
           </div>
         )}
-      </div>
+      </main>
     );
   }
 }
