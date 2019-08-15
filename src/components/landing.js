@@ -12,7 +12,7 @@ const goodReadsAPI = axios.create({
 class Landing extends Component {
   state = {
     searchParam: "",
-    total: 1,
+    results: 1,
     currentPage: 1,
     errorMsg: "",
     loading: false,
@@ -28,7 +28,7 @@ class Landing extends Component {
     e.preventDefault();
     this.setState({
       searchParam: "",
-      total: 1,
+      results: 1,
       currentPage: 1,
       errorMsg: "",
       loading: false,
@@ -38,6 +38,7 @@ class Landing extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    this.setState({ currentPage: 1 });
     this.getBooks();
   };
 
@@ -50,11 +51,11 @@ class Landing extends Component {
 
       goodReadsAPI
         .get(url)
-        .then(({ data: { data: books, total } }) => {
+        .then(({ data: { data: books, results } }) => {
           if (books) {
             this.setState(() => ({
               books,
-              total,
+              results,
               errorMsg: "",
               loading: false
             }));
@@ -68,7 +69,7 @@ class Landing extends Component {
         })
         .catch(err => {
           this.setState(() => ({
-            errorMsg: "No books match your search.",
+            errorMsg: "Try a new search.",
             loading: false
           }));
         });
@@ -85,7 +86,7 @@ class Landing extends Component {
   };
 
   nextPage = () => {
-    const displayPages = Math.floor(this.state.total / 20);
+    const displayPages = Math.ceil(this.state.results / 20);
     if (this.state.currentPage < displayPages) {
       this.setState(
         prevState => ({ currentPage: prevState.currentPage + 1 }),
@@ -96,6 +97,8 @@ class Landing extends Component {
 
   render() {
     const { books } = this.state;
+
+    debugger;
     return (
       <main className="main">
         <SearchBar
@@ -123,6 +126,7 @@ class Landing extends Component {
                 const title = book["best_book"][0]["title"][0];
                 const author = book["best_book"][0]["author"][0]["name"][0];
                 const imgUrl = book["best_book"][0]["image_url"][0];
+                debugger;
                 return (
                   <BookItem
                     key={id}
@@ -133,10 +137,10 @@ class Landing extends Component {
                 );
               })}
             </div>
-            {this.state.total > 1 && !this.state.errorMsg.length && (
+            {this.state.results > 1 && !this.state.errorMsg.length && (
               <div>
                 <Pagination
-                  total={this.state.total}
+                  results={this.state.results}
                   currentPage={this.state.currentPage}
                   nextPage={this.nextPage}
                   prevPage={this.prevPage}

@@ -30,28 +30,37 @@ input {
 button {
   background-color: #0e103d;
   border-radius: 3px;
-  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);
-  color: white;
+  -webkit-box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);
+          box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  cursor: pointer;
 }
 
 button:hover {
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.1);
+  background: #212690;
 }
 
 .loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin-top: 2%;
   font-size: 1.2rem;
   font-weight: 600;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 /* book search */
 .book-list {
+  display: -ms-grid;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  -ms-grid-columns: (minmax(300px, 1fr))[auto-fit];
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 2rem;
   width: 100%;
   margin: auto;
@@ -59,11 +68,20 @@ button:hover {
 }
 
 .book-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   padding: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .book-title {
@@ -81,16 +99,25 @@ button:hover {
 
 /* searchbar */
 .search-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 @media (max-width: 805px) {
   .search-bar {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
     height: 40px;
     padding: 2rem 0;
   }
@@ -133,8 +160,12 @@ button:hover {
 
 /* Pagination */
 .pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-evenly;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
   height: 30px;
   width: 50%;
   min-width: 250px;
@@ -144,14 +175,24 @@ button:hover {
 }
 
 .pagination-dashboard {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
   padding: 0px 20px;
   font-weight: 500;
 }
 
 .pagination-button {
+  font-weight: 700;
   width: 40px;
 }
+/*# sourceMappingURL=App.css.map */

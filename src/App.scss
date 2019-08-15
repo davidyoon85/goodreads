@@ -1,0 +1,172 @@
+$primary-color: #0e103d;
+$font-size: 14px;
+$box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);
+
+//Media Queries
+@mixin small {
+  @media (max-width: 805px) {
+    @content;
+  }
+}
+
+//Flexbox Center
+@mixin flex-center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* main */
+body p {
+  margin: 0;
+  padding: 0;
+}
+
+.main {
+  width: 80%;
+  min-width: 450px;
+  margin: 0 auto;
+  padding: 2rem 0;
+  font-size: $font-size;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+input {
+  padding: 0.5rem 1rem;
+  width: 60%;
+  font-size: 0.8rem;
+  border: none;
+  border-bottom: 2px solid $primary-color;
+}
+
+button {
+  background-color: $primary-color;
+  border-radius: 3px;
+  box-shadow: $box-shadow;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    // background-color: rgba(0, 0, 0, 0.1);
+    background: lighten($primary-color, 20%);
+  }
+}
+
+.loading {
+  margin-top: 2%;
+  font-size: 1.2rem;
+  font-weight: 600;
+
+  @include flex-center();
+}
+
+/* book search */
+.book-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 2rem;
+  width: 100%;
+  margin: auto;
+  margin-top: 5%;
+}
+
+.book-item {
+  flex-direction: column;
+  padding: 10px;
+
+  @include flex-center();
+}
+
+.book-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 5px 0px;
+  text-align: center;
+}
+
+.book-author {
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 5px 0px;
+}
+
+/* searchbar */
+.search-bar {
+  width: 100%;
+  height: 40px;
+
+  @include flex-center();
+
+  @include small {
+    flex-direction: column;
+    height: 40px;
+    padding: 2rem 0;
+  }
+}
+
+.search-bar-input {
+  padding: 0.5rem 1rem;
+  width: 40%;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 2px solid $primary-color;
+  margin-right: 10px;
+}
+
+.search-buttons {
+  @include small {
+    margin: 15px;
+    height: 30px;
+  }
+}
+
+.search-bar-button {
+  width: 100px;
+  height: 30px;
+  font-size: 1rem;
+  margin: 0 5px;
+}
+
+.spinner {
+  margin-top: 50px;
+  height: 50px;
+}
+
+.search-error {
+  margin-top: 3%;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: space-evenly;
+  height: 30px;
+  width: 50%;
+  min-width: 250px;
+  margin: auto;
+  padding: 5% 0%;
+  text-align: center;
+}
+
+.pagination-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0px 20px;
+  font-weight: 500;
+}
+
+.pagination-button {
+  font-weight: 700;
+  width: 40px;
+}
